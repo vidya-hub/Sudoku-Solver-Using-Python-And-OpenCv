@@ -41,9 +41,13 @@ def main():
         gray = cv2.cvtColor(resizedimage, cv2.COLOR_BGR2GRAY)
         gray_blur = cv2.GaussianBlur(gray, (11, 11), 3)
         returns, thresh = cv2.threshold(
-            gray, 125, 255, cv2.THRESH_BINARY_INV)
+            gray, 125, 255,
+            cv2.THRESH_BINARY_INV,
+            )
         contours, hierachy = cv2.findContours(
-            thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            thresh,
+            cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE,
+            )
         getfilteredcontour = filtercontours(contours)
         for con in getfilteredcontour[::-1]:
             area = cv2.contourArea(con)
@@ -52,16 +56,23 @@ def main():
                 concenterlist.append(str(findcontourcenter(
                     con)[0])+"-"+str(findcontourcenter(con)[1]))
                 cv2.drawContours(resizedimage, [con], 0, (0, 255, 0), 2)
-                getroi = gray_blur[rect[1]:rect[1] +
-                                   rect[3], rect[0]:rect[0]+rect[2]]
+                getroi = gray_blur[
+                    rect[1]:rect[1] +
+                                   rect[3], rect[0]:rect[0]+rect[2]
+                    ]
+
                 text = pytesseract.image_to_string(
                     getroi, lang="eng",
-                    config='--psm 7 -c tessedit_char_whitelist=0123456789.%')
-                if str(text).splitlines()[0] == "":
+                    config='--psm 7 -c tessedit_char_whitelist=0123456789.%',
+                    )
+                if str(text) == "":
                     nolist.append(0)
                 else:
-                    nolist.append(int(str(text).splitlines()[0].split(".")[0]))
-            cv2.imshow("Wait I am Reading", resizedimage)
+                    nolist.append(
+                        int(str(text).splitlines()[0].split(".")[0],
+                        ),
+                        )
+            cv2.imshow("Wait I am Reading.......", resizedimage,)
             if cv2.waitKey(1) == 27:
                 break
 
@@ -106,7 +117,10 @@ while True:
                             cv2.FONT_HERSHEY_PLAIN, 2,
                             (255, 0, 0),
                             2)
-    cv2.imshow("OK it's Over See the Result", resizedimage)
+    cv2.imshow(
+    "OK it's Over See the Result",
+     resizedimage,
+     )
     if cv2.waitKey(1) == 27:
         break
 
